@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
+    "http://struts.apache.org/dtds/struts-2.5.dtd">
+
+<struts>
+	<!-- <constant name="struts.convention.result.path" value="/"></constant> -->
+	<constant name="struts.devMode" value="true" />
+	<constant name="struts.custom.i18n.resources" value="global" />
+	<constant name="struts.objectFactory" value="spring" />
+
+	<package name="basicstruts2" extends="struts-default">
+		<interceptors>
+			<interceptor name="authentication"
+				class="edu.poly.interceptor.AuthenticationInterceptor"></interceptor>
+			<interceptor-stack name="authStack">
+				<interceptor-ref name="authentication"></interceptor-ref>
+				<interceptor-ref name="defaultStack"></interceptor-ref>
+			</interceptor-stack>
+		</interceptors>
+
+		<default-interceptor-ref name="authStack"></default-interceptor-ref>
+		<default-action-ref name="home" />
+
+		<global-results>
+			<result name="login" type="redirect">/home.action</result>
+		</global-results>
+
+		<action name="home">
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+			<result>/login.jsp</result>
+		</action>
+
+		<action name="login" class="loginAction" method="execute">
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+			<result name="success">/welcome.jsp</result>
+			<result name="input">/login.jsp</result>
+		</action>
+		<action name="welcome" class="edu.poly.action.WelcomeAction">
+			<result name="success">/welcome.jsp</result>
+		</action>
+	</package>
+
+</struts>
